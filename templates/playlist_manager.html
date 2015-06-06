@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Playlist Manager</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.theme.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.contextMenu.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/image-picker.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static "css/jukebox/playlist_manager.css" %}">
+
+    <script type="text/javascript" src='{% static "js/jquery.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery-ui.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jlayout/jquery.sizes.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jlayout/jlayout.border.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jlayout/jlayout.grid.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jlayout/jlayout.flexgrid.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jlayout/jlayout.flow.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jlayout/jquery.jlayout.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery.ui.position.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery.contextMenu.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery.scrollTo.min.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery.iframe-transport.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jquery.fileupload.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/image-picker.js" %}'></script>
+
+    <script type="text/javascript" src='{% static "js/jukebox/playlist_manager_widgets.js" %}'></script>
+    <script type="text/javascript" src='{% static "js/jukebox/playlist_manager.js" %}'></script>
+
+</head>
+<body>
+
+<div data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="page_layout">
+
+    <div data-layout='{"type": "border", "hgap": 3, "vgap": 3}' class="library_layout center">
+
+        <div class="navigation">
+            <img src="{% static "jukebox.png" %}" height="70" width="70" style="opacity: 0.8">
+            <div id="lib_nav_container">
+                <a class="nav_link" href="#">Playlist Manager</a>
+                <a class="nav_link" href="#">Upload Manager</a>
+                <br>
+                <div class="searchform">
+                    <button class="icon-search"></button>
+                    <label id="search_label">
+                        <input id="search_input" type="text" name="s" value="" placeholder="Search" autocomplete="off">
+                    </label>
+                </div>
+                <div id="search_string"> Search : <span></span></div>
+            </div>
+        </div>
+
+        <div class="artists_col west"></div>
+
+        <div class="center library_col"></div>
+
+        <div id="edit_music_dialog" title="Edit Music"></div>
+
+        <div id="play_music_dialog" title="Play Music">
+            <audio id="player" controls>
+                Votre navigateur ne supporte pas lélément <code>audio</code> element.
+                <source src="">
+            </audio>
+        </div>
+
+        <div id="artist_artwork_dialog" title="Edit Artist Artwork">
+            <form action="" id="artist_artwork_uploader" enctype="multipart/form-data" style="visibility: hidden">
+                {% csrf_token %}
+                <input id="artist_artwork_file_field" name="artwork_file_field" type="file">
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+
+        <div id="album_artwork_dialog" title="Edit Album Artwork">
+            <form action="" id="album_artwork_uploader" enctype="multipart/form-data" style="visibility: hidden">
+                {% csrf_token %}
+                <input id="album_artwork_file_field" name="artwork_file_field" type="file">
+                <input type="submit" value="Upload">
+            </form>
+        </div>
+
+
+    </div>
+
+    <div class="east music_set_col">
+
+        <div class="navigation">
+            <div id="slots_nav_container">
+                <a class="nav_link">Playlist Manager</a>
+                <div class="styled-select">
+                    <select class="set_select" id="set_select">
+                        <option>1</option>
+                        <option selected="selected">2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                    </select>
+                </div>
+                <a href="#" class="btn_input" id="btn_edit" title="Edit current Music Set">
+                    <i class="fa fa-pencil-square-o"></i>
+                </a>
+                <a href="#" class="btn" id="btn_add" title="Add new Music Set">
+                    <i class="fa fa-plus-square-o"></i>
+                </a>
+                <a href="#" class="btn" id="btn_save" title="Save edited Music Set">
+                    <i class="fa fa-floppy-o"></i>
+                </a>
+                <a href="#" class="btn" id="btn_playlist_editor" title="Go to the Edit Playlist page">
+                    <i class="fa fa-table"></i>
+                </a>
+            </div>
+        </div>
+
+        <div id="add_music_set_dialog" title="Add Music Set">
+            <p>
+                <label for="title">Title</label>
+                <input type="text" name="Name" id="title" value=""
+                       class="text ui-widget-content ui-corner-all">
+            </p>
+        </div>
+
+        <div id="playlist_editor_dialog" title="Edit Playlist">
+            <p>
+                <label for="select_A">A</label>
+                <select id="select_A">
+                    <option selected="selected">A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                </select>
+                <label for="select_B">B</label>
+                <select id="select_B">
+                    <option>A</option>
+                    <option selected="selected">B</option>
+                    <option>C</option>
+                    <option>D</option>
+                </select>
+                <label for="select_C">C</label>
+                <select id="select_C">
+                    <option>A</option>
+                    <option>B</option>
+                    <option selected="selected">C</option>
+                    <option>D</option>
+                </select>
+                <label for="select_D">D</label>
+                <select id="select_D">
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option selected="selected">D</option>
+                </select>
+            </p>
+        </div>
+
+
+        <div class="slots_list">
+
+            <div id="selected_set"> Music Set Selected : <a>2</a></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<form action="" id="uploader" enctype="multipart/form-data" style="visibility: hidden">
+    {% csrf_token %}
+    <input id="id_file_field" name="file_field" type="file">
+    <p><input type="submit" value="Upload" /></p>
+</form>
+</body>
+</html>
